@@ -8,6 +8,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -16,6 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * websocket客户端
@@ -26,6 +30,8 @@ public abstract class AbstractWebsocketClient {
     private final Integer maxContentLength = 2 << 13;
     protected EventLoopGroup group;
     protected Channel channel;
+    protected MonitorThread monitorThread;
+    private ScheduledExecutorService executorService;
 
     /**
      * 初始化
@@ -73,6 +79,28 @@ public abstract class AbstractWebsocketClient {
         }
     }
 
+    public boolean isAlive() {
+        return this.channel != null && this.channel.isActive();
+    }
+
+    public void sendMessage(String message) {
+        if (!isAlive()) {
+            return;
+        }
+        this.channel.writeAndFlush(new TextWebSocketFrame(message));
+    }
+
+    public void close() {
+        monitorThread = null;
+        executorService.shutdown();
+    }
+
+    public void start() {
+        this.connect();
+        executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleWithFixedDelay(monitorThread, 0, 5000, TimeUnit.MILLISECONDS);
+    }
+
 
     /**
      * 客户端启动时连接方法
@@ -110,4 +138,5 @@ public abstract class AbstractWebsocketClient {
      * @param message
      */
     public abstract void onReceiveMsg(String message);
+
 }
