@@ -1,4 +1,7 @@
-# zeus
+# 数字货币交易所实时行情 Springboot + Netty
+
+> 目前支持货币数据解析 后续会逐步添加解析
+
 - websocket连接火币服务器
 - 提供本地websocket服务端
 - K线作为历史数据写入mongoDB
