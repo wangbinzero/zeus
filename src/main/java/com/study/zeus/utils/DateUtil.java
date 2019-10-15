@@ -1,4 +1,4 @@
-package com.study.zeus.core.utils;
+package com.study.zeus.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
