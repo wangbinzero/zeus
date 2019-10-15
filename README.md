@@ -6,3 +6,7 @@
 - 支持http查询历史K线数据
 - 支持配置文件订阅交易对
 - 支持其它交易所扩展
+
+
+## Demo
+![image](https://github.com/wangbinzero/zeus/blob/master/image/deal.png)
