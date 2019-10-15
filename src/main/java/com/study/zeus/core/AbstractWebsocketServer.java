@@ -27,6 +27,7 @@ public abstract class AbstractWebsocketServer {
     private static final Logger logger = LoggerFactory.getLogger(AbstractWebsocketServer.class);
     private final Integer maxFrameSize = 2 << 20;
     private final Integer maxContentLength = 2 << 13;
+    public static Map<String, NioSocketChannel> connetionPool = new ConcurrentHashMap<>();
     public static Map<String, NioSocketChannel> depthPool, klinePool, detailPool = new ConcurrentHashMap<>();
     protected EventLoopGroup bossGroup;
     protected EventLoopGroup workGroup;
@@ -64,7 +65,7 @@ public abstract class AbstractWebsocketServer {
 
     }
 
-    public abstract void run();
+    public abstract void run(int port);
 
     public abstract void onReceiveMessage(Request req, NioSocketChannel channel);
 
