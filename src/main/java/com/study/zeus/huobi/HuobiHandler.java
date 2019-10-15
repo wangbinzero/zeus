@@ -62,4 +62,18 @@ public class HuobiHandler extends SimpleChannelInboundHandler<Object> {
         handshaker.handshake(ctx.channel());
     }
 
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+
+        cause.printStackTrace();
+        logger.error("异常信息: [{}]", cause.getMessage());
+
+        if (!promise.isDone()) {
+            promise.setFailure(cause);
+        }
+        ctx.close();
+    }
+
 }

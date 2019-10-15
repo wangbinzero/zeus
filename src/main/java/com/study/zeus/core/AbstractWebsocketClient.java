@@ -1,5 +1,6 @@
 package com.study.zeus.core;
 
+import com.google.common.collect.Sets;
 import com.study.zeus.utils.DateUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ public abstract class AbstractWebsocketClient {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractWebsocketClient.class);
     private final Integer maxContentLength = 2 << 13;
+    protected Set<String> subChannel = Sets.newHashSet();
     protected EventLoopGroup group;
     protected Channel channel;
     protected MonitorThread monitorThread;
