@@ -12,7 +12,29 @@
 - 自定义协议
 
 
-## Demo
+> 服务端连接方式  ws://ip:port/
+
+#### 详情订阅
+```json
+{
+"event": "sub",
+"type": "detail",
+"channel": ["market.btcusdt.detail"]
+}
+```
+
+#### 深度订阅
+```json
+{
+"event": "sub",
+"type": "depth",
+"channel": ["market.btcusdt.depth"]
+}
+```
+
+
+
+## 数据
 ![image](https://github.com/wangbinzero/zeus/blob/master/image/deal.png)
 
 ![image](https://github.com/wangbinzero/zeus/blob/master/image/depth.png)
