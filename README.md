@@ -10,3 +10,11 @@
 
 ## Demo
 ![image](https://github.com/wangbinzero/zeus/blob/master/image/deal.png)
+
+![image](https://github.com/wangbinzero/zeus/blob/master/image/depth.png)
+
+![image](https://github.com/wangbinzero/zeus/blob/master/image/kline.png)
+
+![image](https://github.com/wangbinzero/zeus/blob/master/image/http_kline.png)
+
+
