@@ -1,4 +1,4 @@
-package com.study.zeus.huobi;
+package com.study.zeus.huobi.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -6,6 +6,7 @@ import com.study.zeus.common.Constant;
 import com.study.zeus.core.AbstractWebsocketServer;
 import com.study.zeus.entity.DetailDO;
 import com.study.zeus.entity.KlineDO;
+import com.study.zeus.proto.Response;
 import com.study.zeus.service.KlineService;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -163,7 +164,7 @@ public class HuobiServiceImpl implements HuobiService {
                 String key = entry.getKey();
                 if (channel.equalsIgnoreCase(key)) {
                     NioSocketChannel value = entry.getValue();
-                    value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(QResponse.sucess(object, channel, event))));
+                    value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(object, channel, event))));
                 }
             }
         }

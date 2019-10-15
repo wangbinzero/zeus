@@ -1,4 +1,4 @@
-package com.study.zeus.huobi;
+package com.study.zeus.huobi.service;
 
 import java.util.List;
 
