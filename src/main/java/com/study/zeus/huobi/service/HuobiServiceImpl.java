@@ -51,11 +51,13 @@ public class HuobiServiceImpl implements HuobiService {
         String ch = json.getString("ch");
         if (ch.contains("detail") && ch.contains("trade")) {
             tradeHandle(json);
+            logger.info("成交:[{}]",json);
         } else if (ch.contains("kline")) {
-            logger.info("K线 [{}]", ch);
+            //logger.info("K线 [{}]", json);
             klineHandle(json);
         } else if (ch.contains("depth")) {
             depthHandle(json);
+            //logger.info("深度:[{}]",json);
         } else if (ch.contains("detail") && !ch.contains("trade")) {
             detailHandle(json);
         }

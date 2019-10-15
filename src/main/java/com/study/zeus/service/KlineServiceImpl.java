@@ -1,7 +1,7 @@
 package com.study.zeus.service;
 
-import com.bitong.entity.KlineDO;
 import com.mongodb.WriteResult;
+import com.study.zeus.entity.KlineDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -46,7 +46,7 @@ public class KlineServiceImpl implements KlineService {
     }
 
     @Override
-    public List<KlineDO> klineTest(String kType, String symbol) {
+    public List<KlineDO> queryKline(String kType, String symbol) {
         Query query = new Query();
         query.addCriteria(Criteria.where("kType").is(kType).and("symbol").is(symbol))
                 .with(Sort.by("id").descending())

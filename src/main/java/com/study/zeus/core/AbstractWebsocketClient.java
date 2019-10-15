@@ -100,6 +100,7 @@ public abstract class AbstractWebsocketClient {
 
     public void start() {
         this.connect();
+        monitorThread= new MonitorThread(this);
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(monitorThread, 0, 5000, TimeUnit.MILLISECONDS);
     }

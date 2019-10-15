@@ -30,6 +30,6 @@ public interface KlineService {
      * @param kType
      * @return
      */
-    List<KlineDO> klineTest(String kType, String symbol);
+    List<KlineDO> queryKline(String kType, String symbol);
 
 }
