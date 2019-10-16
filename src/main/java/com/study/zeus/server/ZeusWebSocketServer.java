@@ -157,7 +157,7 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
      */
     private void klineEvent(NioSocketChannel nioSocketChannel, String channel) {
         //channel: request.kline.btcusdt.1min.init
-        //channel: request.kline.btcusdt.1min.page.xxxxxx.xxxxxx
+        //channel: request.kline.btcusdt.1min.page.xxxxxx
         String[] str = channel.split("\\.");
         String symbol = str[2];
         String kType = str[3];
@@ -167,8 +167,7 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
             list = klineService.queryKline(kType, symbol);
         } else if (init.equals("page")) {
             long from = Long.valueOf(str[5]);
-            long to = Long.valueOf(str[6]);
-            list = klineService.list(from, to, symbol, kType);
+            list = klineService.queryFrom(from, symbol, kType);
         }
         nioSocketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(list, channel, "req"))));
     }

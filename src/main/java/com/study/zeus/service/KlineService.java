@@ -26,7 +26,16 @@ public interface KlineService {
     List<KlineDO> list(long from, long to, String symbol, String type);
 
     /**
-     * 测试K线查询
+     * 查询K线 从 from时间点开始向后推
+     * @param from
+     * @param symbol
+     * @param type
+     * @return
+     */
+    List<KlineDO> queryFrom(long from,String symbol,String type);
+
+    /**
+     * K线查询
      * @param kType
      * @return
      */
