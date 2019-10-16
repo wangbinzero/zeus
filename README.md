@@ -32,6 +32,22 @@
 }
 ```
 
+#### K线初始化
+```json
+{
+	"event":"req",
+	"channel":["request.kline.btcusdt.1min.init"]
+}
+```
+
+#### K线分页加载
+```json
+{
+    "event":"req",
+	"channel":["request.kline.btcusdt.1min.page.1571199360.1571199960"]
+}
+```
+
 
 
 ## 数据
