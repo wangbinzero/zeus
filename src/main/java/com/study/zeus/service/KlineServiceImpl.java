@@ -40,7 +40,7 @@ public class KlineServiceImpl implements KlineService {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").gte(from).lte(to).and("symbol").is(symbol).and("kType").is(kType))
                 .with(Sort.by("id").descending())
-                .limit(200);
+                .limit(50);
         List<KlineDO> list = mongoTemplate.find(query, KlineDO.class);
         return list;
     }
@@ -50,7 +50,7 @@ public class KlineServiceImpl implements KlineService {
         Query query = new Query();
         query.addCriteria(Criteria.where("kType").is(kType).and("symbol").is(symbol))
                 .with(Sort.by("id").descending())
-                .limit(200);
+                .limit(50);
         List<KlineDO> result = mongoTemplate.find(query, KlineDO.class);
         return result;
     }

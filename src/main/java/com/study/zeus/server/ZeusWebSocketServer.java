@@ -1,19 +1,20 @@
 package com.study.zeus.server;
 
+import com.alibaba.fastjson.JSON;
 import com.study.zeus.core.AbstractWebsocketServer;
+import com.study.zeus.entity.KlineDO;
 import com.study.zeus.proto.Request;
+import com.study.zeus.proto.Response;
 import com.study.zeus.server.handler.ZeusHandler;
 import com.study.zeus.service.KlineService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ZeusWebSocketServer extends AbstractWebsocketServer {
 
@@ -58,7 +59,7 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
                     break;
             }
         } else if (event.equalsIgnoreCase("req")) {
-            //TODO K线请求
+            klineEvent(socketChannel, channel[0]);
         }
     }
 
@@ -133,5 +134,30 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
             }
         }
         logger.info("客户端:[{}],取消订阅频道成功:[{}]", socketChannel.remoteAddress(), sb.toString());
+    }
+
+
+    /**
+     * K线事件
+     *
+     * @param nioSocketChannel
+     * @param channel
+     */
+    private void klineEvent(NioSocketChannel nioSocketChannel, String channel) {
+        //channel: request.kline.btcusdt.1min.init
+        //channel: request.kline.btcusdt.1min.page.xxxxxx.xxxxxx
+        String[] str = channel.split("\\.");
+        String symbol = str[2];
+        String kType = str[3];
+        String init = str[4];
+        List<KlineDO> list = new ArrayList<>();
+        if (init.equals("init")) {
+            list = klineService.queryKline(kType, symbol);
+        } else if (init.equals("page")) {
+            long from = Long.valueOf(str[5]);
+            long to = Long.valueOf(str[6]);
+            list = klineService.list(from, to, symbol, kType);
+        }
+        nioSocketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(list, channel, "req"))));
     }
 }
