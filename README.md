@@ -44,7 +44,7 @@
 ```json
 {
     "event":"req",
-	"channel":["request.kline.btcusdt.1min.page.1571199360.1571199960"]
+    "channel":["request.kline.btcusdt.1min.page.1571199360.1571199960"]
 }
 ```
 
