@@ -61,7 +61,6 @@ public class ZeusHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if(evt instanceof WebSocketServerProtocolHandler.HandshakeComplete){
-            logger.info("握手成功");
             zeusWebSocketServer.onLine(ctx);
         }else{
             super.userEventTriggered(ctx,evt);

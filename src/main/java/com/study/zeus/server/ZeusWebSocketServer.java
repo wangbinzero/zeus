@@ -119,7 +119,8 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
      */
     private void allocUUID(ChannelHandlerContext ctx) {
         String uuid = UUID.randomUUID().toString();
-        ctx.writeAndFlush(new TextWebSocketFrame(Response.sucess(uuid, "conn", "conn").toString()));
+        logger.info("客户端:[{}],UUID:[{}]", RemoteUtil.parseRemoteAddress(ctx.channel()), uuid);
+        ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(uuid, "conn", "conn"))));
         connetionPool.put(uuid, (NioSocketChannel) ctx.channel());
     }
 
