@@ -166,7 +166,7 @@ public class HuobiServiceImpl implements HuobiService {
                 String key = entry.getKey();
                 if (channel.equalsIgnoreCase(key)) {
                     NioSocketChannel value = entry.getValue();
-                    value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(object, channel, event))));
+                    value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(object)));
                 }
             }
         }
