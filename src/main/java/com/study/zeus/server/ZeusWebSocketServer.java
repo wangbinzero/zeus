@@ -7,6 +7,7 @@ import com.study.zeus.proto.Request;
 import com.study.zeus.proto.Response;
 import com.study.zeus.server.handler.ZeusHandler;
 import com.study.zeus.service.KlineService;
+import com.study.zeus.utils.RemoteUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -63,7 +64,8 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
 
     @Override
     public void onLine(ChannelHandlerContext ctx) {
-
+        logger.info("客户端:[{}] 上线", RemoteUtil.parseRemoteAddress(ctx.channel()));
+        allocUUID(ctx);
     }
 
     @Override
@@ -108,6 +110,17 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
             sb.append(channel + ",");
         }
         logger.info("客户端:[{}],订阅频道成功:[{}]", socketChannel.remoteAddress(), sb.toString());
+    }
+
+    /**
+     * 为客户端分配UUID 并写入连接池
+     *
+     * @param ctx
+     */
+    private void allocUUID(ChannelHandlerContext ctx) {
+        String uuid = UUID.randomUUID().toString();
+        ctx.writeAndFlush(new TextWebSocketFrame(Response.sucess(uuid, "conn", "conn").toString()));
+        connetionPool.put(uuid, (NioSocketChannel) ctx.channel());
     }
 
 
