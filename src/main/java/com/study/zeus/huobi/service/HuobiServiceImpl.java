@@ -140,13 +140,7 @@ public class HuobiServiceImpl implements HuobiService {
         String ch = json.getString("ch");
         String result = json.getString("tick");
 
-        float asks[][];
-        //String pair = ch.split(".")[1];
-        //JSONObject result = new JSONObject();
-        //result.put("asks",json.getString("asks"));
-        //result.put("bids",json.getString("bids"));
-
-        //depthDO.setPair(pair);
+        logger.info("深度: [{}]",result);
         pushMessageToChannel(result, ch, "depth", AbstractWebsocketServer.depthPool);
     }
 
