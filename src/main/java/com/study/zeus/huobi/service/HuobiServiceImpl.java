@@ -1,6 +1,7 @@
 package com.study.zeus.huobi.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.study.zeus.common.Constant;
 import com.study.zeus.core.AbstractWebsocketServer;
@@ -112,7 +113,7 @@ public class HuobiServiceImpl implements HuobiService {
         klineDO.setType("kline");
         klineDO.setPair(pair);
         klineDO.setkTime(Integer.valueOf(klineDO.getId()));
-        klineDO.setId(symbol+klineDO.getId()+kType);
+        klineDO.setId(symbol + klineDO.getId() + kType);
         klineService.updateKline(klineDO);
 
     }
@@ -138,10 +139,8 @@ public class HuobiServiceImpl implements HuobiService {
      */
     private void depthHandle(JSONObject json) {
         String ch = json.getString("ch");
-        String result = json.getString("tick");
-
-        logger.info("深度: [{}]",result);
-        pushMessageToChannel(result, ch, "depth", AbstractWebsocketServer.depthPool);
+        JSONObject jsonObject = (JSONObject) JSONObject.parse(json.getString("tick"));
+        pushMessageToChannel(jsonObject, ch, "depth", AbstractWebsocketServer.depthPool);
     }
 
 
@@ -153,12 +152,13 @@ public class HuobiServiceImpl implements HuobiService {
      * @param event
      */
     private void pushMessageToChannel(Object object, String channel, String event, Map<String, NioSocketChannel> map) {
+        logger.info("打印深度  channel:{}",channel);
         if (null != map) {
             Iterator<Map.Entry<String, NioSocketChannel>> entryIterator = map.entrySet().iterator();
             while (entryIterator.hasNext()) {
                 Map.Entry<String, NioSocketChannel> entry = entryIterator.next();
                 String key = entry.getKey();
-                if (channel.equalsIgnoreCase(key)) {
+                if (channel.contains(key)) {
                     NioSocketChannel value = entry.getValue();
                     value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(object)));
                 }

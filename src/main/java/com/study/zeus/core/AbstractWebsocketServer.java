@@ -28,7 +28,9 @@ public abstract class AbstractWebsocketServer {
     private final Integer maxFrameSize = 2 << 20;
     private final Integer maxContentLength = 2 << 13;
     public static Map<String, NioSocketChannel> connetionPool = new ConcurrentHashMap<>();
-    public static Map<String, NioSocketChannel> depthPool, klinePool, detailPool = new ConcurrentHashMap<>();
+    public static Map<String, NioSocketChannel> depthPool = new ConcurrentHashMap<>();
+    public static Map<String, NioSocketChannel> klinePool = new ConcurrentHashMap<>();
+    public static Map<String, NioSocketChannel> detailPool = new ConcurrentHashMap<>();
     protected EventLoopGroup bossGroup;
     protected EventLoopGroup workGroup;
 

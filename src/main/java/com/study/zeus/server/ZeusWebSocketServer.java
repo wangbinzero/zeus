@@ -46,8 +46,6 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
                     addChannel(channel, depthPool, socketChannel);
                     break;
             }
-
-
         } else if (event.equalsIgnoreCase("un_sub")) {
             switch (type) {
                 case "detail":
