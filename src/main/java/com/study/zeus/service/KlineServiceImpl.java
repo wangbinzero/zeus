@@ -38,7 +38,7 @@ public class KlineServiceImpl implements KlineService {
     @Override
     public List<KlineDO> list(long from, long to, String symbol, String kType) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("id").gte(from).lte(to).and("symbol").is(symbol).and("kType").is(kType))
+        query.addCriteria(Criteria.where("kTime").gte(from).lte(to).and("symbol").is(symbol).and("kType").is(kType))
                 .with(Sort.by("id").descending())
                 .limit(50);
         List<KlineDO> list = mongoTemplate.find(query, KlineDO.class);
