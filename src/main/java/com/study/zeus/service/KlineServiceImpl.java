@@ -23,7 +23,6 @@ public class KlineServiceImpl implements KlineService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-
     @Override
     public WriteResult updateKline(KlineDO klineDO) {
         Query query = new Query(Criteria.where("id").is(klineDO.getId()));

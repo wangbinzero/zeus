@@ -31,20 +31,30 @@
 "channel": ["market.btcusdt.depth"]
 }
 ```
-
-#### K线初始化
+#### K线订阅
 ```json
+
 {
-	"event":"req",
-	"channel":["request.kline.btcusdt.1min.init"]
+    "event": "sub",
+    "type": "kline",
+    "channel": ["market.btcusdt.kline.1min"]
 }
 ```
 
-#### K线分页加载
+
+#### 历史K线
+```json
+{
+	"event":"req",
+	"channel":["request.kline.btcusdt.history.1min.init"]
+}
+```
+
+#### 历史K线分页加载
 ```json
 {
     "event":"req",
-    "channel":["request.kline.btcusdt.1min.page.1571199360.1571199960"]
+    "channel":["request.kline.btcusdt.history.1min.page.1571199360"]
 }
 ```
 

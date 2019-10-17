@@ -46,6 +46,8 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
                 case "depth":
                     addChannel(channel, depthPool, socketChannel);
                     break;
+                case "kline":
+                    addChannel(channel, klinePool, socketChannel);
             }
         } else if (event.equalsIgnoreCase("un_sub")) {
             switch (type) {
@@ -56,6 +58,8 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
                 case "depth":
                     removeChannelFromPool(channel, depthPool);
                     break;
+                case "kline":
+                    removeChannelFromPool(channel, klinePool);
             }
         } else if (event.equalsIgnoreCase("req")) {
             klineEvent(socketChannel, channel[0]);

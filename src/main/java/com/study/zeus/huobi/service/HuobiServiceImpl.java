@@ -111,6 +111,7 @@ public class HuobiServiceImpl implements HuobiService {
         klineDO.setPair(pair);
         klineDO.setkTime(Integer.valueOf(klineDO.getId()));
         klineDO.setId(symbol + klineDO.getId() + kType);
+        pushMessageToChannel(klineDO, ch, "kline", AbstractWebsocketServer.klinePool);
         klineService.updateKline(klineDO);
 
     }

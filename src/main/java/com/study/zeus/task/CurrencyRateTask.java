@@ -27,7 +27,7 @@ public class CurrencyRateTask {
     private RedisTemplate<String, Object> redisTemplate;
 
 
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     private void task() {
         OkHttpClient client = new OkHttpClient.Builder().build();
         Request request = new Request
