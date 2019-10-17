@@ -67,7 +67,7 @@ public class HuobiServiceImpl implements HuobiService {
     }
 
     /**
-     * 成交详情
+     * 24小时成交详情
      *
      * @param json
      */
@@ -157,7 +157,7 @@ public class HuobiServiceImpl implements HuobiService {
                 String key = entry.getKey();
                 if (channel.contains(key)) {
                     NioSocketChannel value = entry.getValue();
-                    value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(object)));
+                    value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(object,channel,event))));
                 }
             }
         }

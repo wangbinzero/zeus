@@ -14,49 +14,117 @@
 
 > 服务端连接方式  ws://ip:port/
 
-#### 详情订阅
+#### 订阅
+
+- K线
+- 24小时成交详情
+- 深度
+- 最新成交
+
+
+
+> K线
+
 ```json
 {
-"event": "sub",
-"type": "detail",
-"channel": ["market.btcusdt.detail"]
+  "event":"sub",
+  "channel":["market.btcusdt.kline.1min"],   //1min 5min 15min 30min 60min 1day 1mon..
+  "type":"kline"
 }
 ```
 
-#### 深度订阅
 ```json
-{
-"event": "sub",
-"type": "depth",
-"channel": ["market.btcusdt.depth"]
-}
-```
-#### K线订阅
-```json
-
-{
-    "event": "sub",
-    "type": "kline",
-    "channel": ["market.btcusdt.kline.1min"]
-}
+返回
 ```
 
 
-#### 历史K线
+
+> 24小时成交详情
+
 ```json
 {
-	"event":"req",
-	"channel":["request.kline.btcusdt.history.1min.init"]
+  "event":"sub",
+  "channel":["market.btcusdt.detail"],
+  "type":"detail"
 }
 ```
 
-#### 历史K线分页加载
+```json
+返回
+```
+
+
+
+> 深度
+
 ```json
 {
-    "event":"req",
-    "channel":["request.kline.btcusdt.history.1min.page.1571199360"]
+  "event":"sub",
+  "channel":["market.btcusdt.depth"],
+  "type"":"depth"
 }
 ```
+
+```json
+返回
+```
+
+
+
+> 最新成交
+
+```json
+{
+  "event":"sub",
+  "channel":"market.btcusdt.trade.detail",
+  "type":"trade"
+}
+```
+
+```json
+返回
+```
+
+
+
+#### 请求
+
+- 历史K线初始化
+- 历史K线分页加载
+
+
+
+> 历史K线初始化
+
+```json
+{
+  "event":"req",
+  "channel":["market.kline.btcusdt.1min"]
+}
+```
+
+```json
+返回
+```
+
+
+
+> 历史K线分页加载
+
+```json
+{
+  "event":"req",
+  "channel":["market.kline.btcusdt.1min.page.1571199360"]
+}
+```
+
+```json
+返回
+```
+
+
+
+
 
 
 
