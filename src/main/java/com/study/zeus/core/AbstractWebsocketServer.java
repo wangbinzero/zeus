@@ -43,6 +43,7 @@ public abstract class AbstractWebsocketServer {
      * sub_channel 订阅频道
      * --------------------------
      */
+    public static Map<String, NioSocketChannel> connetionPool = new ConcurrentHashMap<>();
     public static Map<String, NioSocketChannel> depthPool = new ConcurrentHashMap<>();
     public static Map<String, NioSocketChannel> klinePool = new ConcurrentHashMap<>();
     public static Map<String, NioSocketChannel> detailPool = new ConcurrentHashMap<>();
@@ -109,7 +110,6 @@ public abstract class AbstractWebsocketServer {
                 }
                 sub_channel.put(clientId, newSet);
             }
-
         }
     }
 
@@ -157,7 +157,6 @@ public abstract class AbstractWebsocketServer {
      */
     public static void senMessage(Object msg, String channel, String event, Map<String, NioSocketChannel> map) {
         if (null != map) {
-
             Iterator<Map.Entry<String, NioSocketChannel>> entryIterator = map.entrySet().iterator();
             while (entryIterator.hasNext()) {
                 Map.Entry<String, NioSocketChannel> item = entryIterator.next();

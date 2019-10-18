@@ -87,7 +87,7 @@ public class HuobiServiceImpl implements HuobiService {
         detailDO.setTs(json.getLong("ts"));
         detailDO.setPair(pair);
         detailDO.setSymbol(symbol);
-        AbstractWebsocketServer.senMessage(detailDO,ch,"detail",AbstractWebsocketServer.depthPool);
+        AbstractWebsocketServer.senMessage(detailDO,ch,"detail",AbstractWebsocketServer.detailPool);
         //pushMessageToChannel(detailDO, ch, "detail", AbstractWebsocketServer.detailPool);
         redisTemplate.opsForValue().set(String.format(Constant.TICKER_KEY, pair), JSON.toJSONString(detailDO));
     }

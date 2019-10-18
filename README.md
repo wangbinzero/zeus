@@ -68,7 +68,7 @@
 {
   "event":"sub",
   "id": "723c9150-e143-4d80-84fc-6d0acdcba8f5",
-  "channel":["market.btcusdt.depth"],
+  "channel":["market.btcusdt.depth.step1"],
   "type":"depth"
 }
 ```
@@ -93,6 +93,17 @@
 ```json
 返回
 ```
+
+> 取消订阅所有
+```json
+{
+  "event":"un_sub",
+  "id": "723c9150-e143-4d80-84fc-6d0acdcba8f5",
+  "type":"all"
+}
+
+```
+
 
 
 
