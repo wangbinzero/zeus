@@ -104,11 +104,9 @@ public abstract class AbstractWebsocketServer {
             Set<String> sets = sub_channel.get(clientId);
 
             if (null != sets) {
-//                synchronized (sets) {
                 for (int i = 0; i < channel.length; i++) {
                     sets.add(channel[i]);
                 }
-//                }
             } else {
                 Set<String> newSet = new HashSet<>();
                 for (int i = 0; i < channel.length; i++) {
@@ -138,7 +136,6 @@ public abstract class AbstractWebsocketServer {
         List<String> channList = Arrays.asList(channel);
         Set<String> newSet = new HashSet<>();
         if (null != set) {
-//            synchronized (set) {
             Iterator<String> iterator = set.iterator();
             while (iterator.hasNext()) {
                 String value = iterator.next();
@@ -147,7 +144,6 @@ public abstract class AbstractWebsocketServer {
                 }
             }
             sub_channel.put(clientId, newSet);
-//            }
         }
     }
 

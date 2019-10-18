@@ -48,13 +48,13 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
             String clientId = req.getId();
             switch (type) {
                 case Constant.Cmd.DETAIL:
-                    AbstractWebsocketServer.subChannel(clientId, socketChannel, detailPool, channel);
+                    subChannel(clientId, socketChannel, detailPool, channel);
                     break;
                 case Constant.Cmd.DEPTH:
-                    AbstractWebsocketServer.subChannel(clientId, socketChannel, depthPool, channel);
+                    subChannel(clientId, socketChannel, depthPool, channel);
                     break;
                 case Constant.Cmd.KLINE:
-                    AbstractWebsocketServer.subChannel(clientId, socketChannel, klinePool, channel);
+                    subChannel(clientId, socketChannel, klinePool, channel);
             }
         } else if (event.equalsIgnoreCase("un_sub")) {
             if (StringUtils.isEmpty(req.getId())) {
@@ -64,15 +64,15 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
             String clientId = req.getId();
             switch (type) {
                 case Constant.Cmd.DETAIL:
-                    AbstractWebsocketServer.unSubChannel(clientId, detailPool, socketChannel, channel);
+                    unSubChannel(clientId, detailPool, socketChannel, channel);
                     break;
                 case Constant.Cmd.DEPTH:
-                    AbstractWebsocketServer.unSubChannel(clientId, depthPool, socketChannel, channel);
+                    unSubChannel(clientId, depthPool, socketChannel, channel);
                     break;
                 case Constant.Cmd.KLINE:
-                    AbstractWebsocketServer.unSubChannel(clientId, klinePool, socketChannel, channel);
+                    unSubChannel(clientId, klinePool, socketChannel, channel);
                 case Constant.Cmd.ALL:
-                    AbstractWebsocketServer.unSubAllChannel(clientId);
+                    unSubAllChannel(clientId);
             }
         } else if (event.equalsIgnoreCase("req")) {
             klineEvent(socketChannel, channel[0]);
@@ -137,7 +137,7 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
      */
     private void allocUUID(ChannelHandlerContext ctx) {
         String uuid = UUID.randomUUID().toString();
-        AbstractWebsocketServer.connetionPool.put(uuid, (NioSocketChannel) ctx.channel());
+        connetionPool.put(uuid, (NioSocketChannel) ctx.channel());
         logger.info("客户端:[{}],UUID:[{}]", RemoteUtil.parseRemoteAddress(ctx.channel()), uuid);
         ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(uuid, "conn", "conn"))));
     }
