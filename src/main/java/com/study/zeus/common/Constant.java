@@ -28,8 +28,15 @@ public interface Constant {
     /**
      * K线交易周期
      */
-    String[] PERIOD = {"1min","5min","15min","30min","60min","1day","1mon","1week","1year"};
+    String[] PERIOD = {"1min", "5min", "15min", "30min", "60min", "1day", "1mon", "1week", "1year"};
 
 
     String TICKER_KEY = "ticker:%s";
+
+    interface Cmd {
+        String DETAIL = "detail";
+        String DEPTH = "depth";
+        String KLINE = "kline";
+        String ALL = "all";
+    }
 }

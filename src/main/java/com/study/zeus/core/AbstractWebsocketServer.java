@@ -124,7 +124,6 @@ public abstract class AbstractWebsocketServer {
                     set.remove(value);
                 }
             }
-
             if (!iterator.hasNext()) {
                 map.remove(clientId);
             }

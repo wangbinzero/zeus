@@ -1,6 +1,7 @@
 package com.study.zeus.server;
 
 import com.alibaba.fastjson.JSON;
+import com.study.zeus.common.Constant;
 import com.study.zeus.core.AbstractWebsocketServer;
 import com.study.zeus.entity.KlineDO;
 import com.study.zeus.proto.Request;
@@ -46,26 +47,26 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
         String clientId = req.getId();
         if (event.equalsIgnoreCase("sub")) {
             switch (type) {
-                case "detail":
+                case Constant.Cmd.DETAIL:
                     AbstractWebsocketServer.subChannel(clientId, socketChannel, detailPool, channel);
                     break;
-                case "depth":
+                case Constant.Cmd.DEPTH:
                     AbstractWebsocketServer.subChannel(clientId, socketChannel, depthPool, channel);
                     break;
-                case "kline":
+                case Constant.Cmd.KLINE:
                     AbstractWebsocketServer.subChannel(clientId, socketChannel, klinePool, channel);
             }
         } else if (event.equalsIgnoreCase("un_sub")) {
             switch (type) {
-                case "detail":
+                case Constant.Cmd.DETAIL:
                     AbstractWebsocketServer.unSubChannel(clientId, detailPool, channel);
                     break;
-                case "depth":
+                case Constant.Cmd.DEPTH:
                     AbstractWebsocketServer.unSubChannel(clientId, depthPool, channel);
                     break;
-                case "kline":
+                case Constant.Cmd.KLINE:
                     AbstractWebsocketServer.unSubChannel(clientId, klinePool, channel);
-                case "all":
+                case Constant.Cmd.ALL:
                     AbstractWebsocketServer.unSubAllChannel(clientId);
             }
         } else if (event.equalsIgnoreCase("req")) {
