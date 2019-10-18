@@ -14,6 +14,11 @@
 
 > 服务端连接方式  ws://ip:port/
 
+
+# Usage
+
+本地客户端在与服务端握手时，服务器会为客户端分配一个唯一识别码UUID，在接下来的所有请求中都必须带上该ID
+
 #### 订阅
 
 - K线
@@ -28,6 +33,7 @@
 ```json
 {
   "event":"sub",
+  "id": "723c9150-e143-4d80-84fc-6d0acdcba8f5",
   "channel":["market.btcusdt.kline.1min"],   //1min 5min 15min 30min 60min 1day 1mon..
   "type":"kline"
 }
@@ -44,6 +50,7 @@
 ```json
 {
   "event":"sub",
+  "id": "723c9150-e143-4d80-84fc-6d0acdcba8f5",
   "channel":["market.btcusdt.detail"],
   "type":"detail"
 }
@@ -60,6 +67,7 @@
 ```json
 {
   "event":"sub",
+  "id": "723c9150-e143-4d80-84fc-6d0acdcba8f5",
   "channel":["market.btcusdt.depth"],
   "type":"depth"
 }
@@ -76,6 +84,7 @@
 ```json
 {
   "event":"sub",
+  "id": "723c9150-e143-4d80-84fc-6d0acdcba8f5",
   "channel":"market.btcusdt.trade.detail",
   "type":"trade"
 }

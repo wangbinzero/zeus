@@ -40,12 +40,12 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
         String event = req.getEvent();
         String type = req.getType();
         String[] channel = req.getChannel();
-        if (StringUtils.isEmpty(req.getId())) {
-            socketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.paramError("参数错误", 10001))));
-            return;
-        }
-        String clientId = req.getId();
         if (event.equalsIgnoreCase("sub")) {
+            if (StringUtils.isEmpty(req.getId())) {
+                socketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.paramError("参数错误", 10001))));
+                return;
+            }
+            String clientId = req.getId();
             switch (type) {
                 case Constant.Cmd.DETAIL:
                     AbstractWebsocketServer.subChannel(clientId, socketChannel, detailPool, channel);
@@ -57,6 +57,11 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
                     AbstractWebsocketServer.subChannel(clientId, socketChannel, klinePool, channel);
             }
         } else if (event.equalsIgnoreCase("un_sub")) {
+            if (StringUtils.isEmpty(req.getId())) {
+                socketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.paramError("参数错误", 10001))));
+                return;
+            }
+            String clientId = req.getId();
             switch (type) {
                 case Constant.Cmd.DETAIL:
                     AbstractWebsocketServer.unSubChannel(clientId, detailPool, channel);
