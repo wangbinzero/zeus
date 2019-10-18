@@ -2,6 +2,7 @@ package com.study.zeus.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class DateUtil {
 
@@ -12,4 +13,7 @@ public class DateUtil {
         return ldt.format(DTF);
     }
 
+    public static long format(Date date){
+        return date.getTime();
+    }
 }

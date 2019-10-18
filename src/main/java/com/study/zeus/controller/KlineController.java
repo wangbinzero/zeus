@@ -43,6 +43,7 @@ public class KlineController {
      */
     @GetMapping("/rich_query")
     public List<KlineDO> richQuery(String kType, String symbol, Date from, Date to) {
+
         return null;
     }
 }

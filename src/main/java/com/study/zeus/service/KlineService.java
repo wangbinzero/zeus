@@ -3,6 +3,7 @@ package com.study.zeus.service;
 import com.mongodb.WriteResult;
 import com.study.zeus.entity.KlineDO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface KlineService {
@@ -40,5 +41,15 @@ public interface KlineService {
      * @return
      */
     List<KlineDO> queryKline(String kType, String symbol);
+
+    /**
+     * K线查询
+     * @param kType
+     * @param symbol
+     * @param from
+     * @param to
+     * @return
+     */
+    List<KlineDO> richQuery(String kType, String symbol, Date from,Date to);
 
 }

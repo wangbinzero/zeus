@@ -87,7 +87,8 @@ public class HuobiServiceImpl implements HuobiService {
         detailDO.setTs(json.getLong("ts"));
         detailDO.setPair(pair);
         detailDO.setSymbol(symbol);
-        pushMessageToChannel(detailDO, ch, "detail", AbstractWebsocketServer.detailPool);
+        AbstractWebsocketServer.senMessage(detailDO,ch,"detail",AbstractWebsocketServer.depthPool);
+        //pushMessageToChannel(detailDO, ch, "detail", AbstractWebsocketServer.detailPool);
         redisTemplate.opsForValue().set(String.format(Constant.TICKER_KEY, pair), JSON.toJSONString(detailDO));
     }
 
@@ -110,7 +111,8 @@ public class HuobiServiceImpl implements HuobiService {
         klineDO.setPair(pair);
         klineDO.setkTime(Integer.valueOf(klineDO.getId()));
         klineDO.setId(symbol + klineDO.getId() + kType);
-        pushMessageToChannel(klineDO, ch, "kline", AbstractWebsocketServer.klinePool);
+        AbstractWebsocketServer.senMessage(klineDO,ch,"kline",AbstractWebsocketServer.klinePool);
+        //pushMessageToChannel(klineDO, ch, "kline", AbstractWebsocketServer.klinePool);
         klineService.updateKline(klineDO);
 
     }
@@ -137,7 +139,8 @@ public class HuobiServiceImpl implements HuobiService {
     private void depthHandle(JSONObject json) {
         String ch = json.getString("ch");
         JSONObject jsonObject = (JSONObject) JSONObject.parse(json.getString("tick"));
-        pushMessageToChannel(jsonObject, ch, "depth", AbstractWebsocketServer.depthPool);
+        AbstractWebsocketServer.senMessage(jsonObject,ch,"depth",AbstractWebsocketServer.depthPool);
+        //pushMessageToChannel(jsonObject, ch, "depth", AbstractWebsocketServer.depthPool);
     }
 
 
@@ -153,8 +156,8 @@ public class HuobiServiceImpl implements HuobiService {
             Iterator<Map.Entry<String, NioSocketChannel>> entryIterator = map.entrySet().iterator();
             while (entryIterator.hasNext()) {
                 Map.Entry<String, NioSocketChannel> entry = entryIterator.next();
-                String key = entry.getKey();
-                if (channel.contains(key)) {
+                String clientId = entry.getKey();
+                if (channel.contains(clientId)) {
                     NioSocketChannel value = entry.getValue();
                     value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(object,channel,event))));
                 }

@@ -1,6 +1,8 @@
 package com.study.zeus.core;
 
+import com.alibaba.fastjson.JSON;
 import com.study.zeus.proto.Request;
+import com.study.zeus.proto.Response;
 import com.study.zeus.utils.StringUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -10,6 +12,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
@@ -88,13 +91,16 @@ public abstract class AbstractWebsocketServer {
      * @param pool     连接池
      * @param channel  订阅频道
      */
-    public synchronized static void subChannel(String clientId, NioSocketChannel chan, Map<String, NioSocketChannel> pool, String... channel) {
+    public static void subChannel(String clientId, NioSocketChannel chan, Map<String, NioSocketChannel> pool, String... channel) {
         if (null != pool) {
             pool.put(clientId, chan);
             Set<String> sets = sub_channel.get(clientId);
+
             if (null != sets) {
-                for (int i = 0; i < channel.length; i++) {
-                    sets.add(channel[i]);
+                synchronized (sets) {
+                    for (int i = 0; i < channel.length; i++) {
+                        sets.add(channel[i]);
+                    }
                 }
             } else {
                 Set<String> newSet = new HashSet<>();
@@ -103,6 +109,7 @@ public abstract class AbstractWebsocketServer {
                 }
                 sub_channel.put(clientId, newSet);
             }
+
         }
     }
 
@@ -113,19 +120,21 @@ public abstract class AbstractWebsocketServer {
      * @param clientId 客户端ID
      * @param channel  订阅频道
      */
-    public synchronized static void unSubChannel(String clientId, Map<String, NioSocketChannel> map, String... channel) {
+    public static void unSubChannel(String clientId, Map<String, NioSocketChannel> map, String... channel) {
         Set<String> set = sub_channel.get(clientId);
         List<String> channList = Arrays.asList(channel);
         if (null != set) {
-            Iterator<String> iterator = set.iterator();
-            while (iterator.hasNext()) {
-                String value = iterator.next();
-                if (channList.contains(value)) {
-                    set.remove(value);
+            synchronized (set) {
+                Iterator<String> iterator = set.iterator();
+                while (iterator.hasNext()) {
+                    String value = iterator.next();
+                    if (channList.contains(value)) {
+                        set.remove(value);
+                    }
                 }
-            }
-            if (!iterator.hasNext()) {
-                map.remove(clientId);
+                if (!iterator.hasNext()) {
+                    map.remove(clientId);
+                }
             }
         }
     }
@@ -135,6 +144,33 @@ public abstract class AbstractWebsocketServer {
         klinePool.remove(clientId);
         detailPool.remove(clientId);
         sub_channel.remove(clientId);
+    }
+
+
+    /**
+     * 发送消息
+     *
+     * @param msg
+     * @param channel
+     * @param event
+     * @param map
+     */
+    public static void senMessage(Object msg, String channel, String event, Map<String, NioSocketChannel> map) {
+        if (null != map) {
+
+            Iterator<Map.Entry<String, NioSocketChannel>> entryIterator = map.entrySet().iterator();
+            while (entryIterator.hasNext()) {
+                Map.Entry<String, NioSocketChannel> item = entryIterator.next();
+                String clientId = item.getKey();
+                NioSocketChannel conn = item.getValue();
+                Set<String> sets = sub_channel.get(clientId);
+                if (null != sets) {
+                    if (sets.contains(channel)) {
+                        conn.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(msg, channel, event))));
+                    }
+                }
+            }
+        }
     }
 
     public abstract void run(int port);

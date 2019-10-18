@@ -65,6 +65,11 @@ public class KlineServiceImpl implements KlineService {
         return result;
     }
 
+    @Override
+    public List<KlineDO> richQuery(String kType, String symbol, Date from, Date to) {
+        return null;
+    }
+
 
     /**
      * @param klineDO
