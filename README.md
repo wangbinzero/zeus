@@ -61,7 +61,7 @@
 {
   "event":"sub",
   "channel":["market.btcusdt.depth"],
-  "type"":"depth"
+  "type":"depth"
 }
 ```
 

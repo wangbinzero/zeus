@@ -1,7 +1,6 @@
 package com.study.zeus.huobi.service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.study.zeus.common.Constant;
 import com.study.zeus.core.AbstractWebsocketServer;
@@ -27,7 +26,7 @@ import java.util.Map;
 @Service
 public class HuobiServiceImpl implements HuobiService {
 
-    private static final Logger logger = LoggerFactory.getLogger(HuobiServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HuobiServiceImpl.class);
 
     @Value("${hb.sub.symbol}")
     private String[] subSymbols;

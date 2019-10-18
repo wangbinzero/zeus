@@ -8,6 +8,7 @@ import com.study.zeus.proto.Response;
 import com.study.zeus.server.handler.ZeusHandler;
 import com.study.zeus.service.KlineService;
 import com.study.zeus.utils.RemoteUtil;
+import com.study.zeus.utils.StringUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -38,28 +39,34 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
         String event = req.getEvent();
         String type = req.getType();
         String[] channel = req.getChannel();
+        if (StringUtils.isEmpty(req.getId())) {
+            socketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.paramError("参数错误", 10001))));
+            return;
+        }
+        String clientId = req.getId();
         if (event.equalsIgnoreCase("sub")) {
             switch (type) {
                 case "detail":
-                    addChannel(channel, detailPool, socketChannel);
+                    AbstractWebsocketServer.subChannel(clientId, socketChannel, detailPool, channel);
                     break;
                 case "depth":
-                    addChannel(channel, depthPool, socketChannel);
+                    AbstractWebsocketServer.subChannel(clientId, socketChannel, depthPool, channel);
                     break;
                 case "kline":
-                    addChannel(channel, klinePool, socketChannel);
+                    AbstractWebsocketServer.subChannel(clientId, socketChannel, klinePool, channel);
             }
         } else if (event.equalsIgnoreCase("un_sub")) {
             switch (type) {
                 case "detail":
-                    logger.info("取消订阅");
-                    removeChannelFromPool(channel, detailPool);
+                    AbstractWebsocketServer.unSubChannel(clientId, detailPool, channel);
                     break;
                 case "depth":
-                    removeChannelFromPool(channel, depthPool);
+                    AbstractWebsocketServer.unSubChannel(clientId, depthPool, channel);
                     break;
                 case "kline":
-                    removeChannelFromPool(channel, klinePool);
+                    AbstractWebsocketServer.unSubChannel(clientId, klinePool, channel);
+                case "all":
+                    AbstractWebsocketServer.unSubAllChannel(clientId);
             }
         } else if (event.equalsIgnoreCase("req")) {
             klineEvent(socketChannel, channel[0]);
@@ -86,15 +93,16 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
      *
      * @param channel
      */
-    private void removeAllSubChannel(NioSocketChannel channel, Map<String, NioSocketChannel> map) {
+    private synchronized void removeAllSubChannel(NioSocketChannel channel, Map<String, NioSocketChannel> map) {
         if (null != map) {
             Iterator<Map.Entry<String, NioSocketChannel>> entryIterator = map.entrySet().iterator();
             while (entryIterator.hasNext()) {
                 Map.Entry<String, NioSocketChannel> entry = entryIterator.next();
                 NioSocketChannel value = entry.getValue();
-                String key = entry.getKey();
+                String clientId = entry.getKey();
                 if (channel == value) {
-                    connetionPool.remove(key);
+                    map.remove(clientId);
+                    AbstractWebsocketServer.unSubAllChannel(clientId);
                 }
             }
         }
@@ -125,7 +133,6 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
         String uuid = UUID.randomUUID().toString();
         logger.info("客户端:[{}],UUID:[{}]", RemoteUtil.parseRemoteAddress(ctx.channel()), uuid);
         ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(uuid, "conn", "conn"))));
-        connetionPool.put(uuid, (NioSocketChannel) ctx.channel());
     }
 
 
