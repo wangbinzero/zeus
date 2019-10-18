@@ -94,15 +94,21 @@ public abstract class AbstractWebsocketServer {
      */
     public static void subChannel(String clientId, NioSocketChannel chan, Map<String, NioSocketChannel> pool, String... channel) {
         if (null != pool) {
+            //判断非法操作
+            NioSocketChannel conn = connetionPool.get(clientId);
+            if (chan != conn) {
+                chan.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.illegaError())));
+                return;
+            }
             pool.put(clientId, chan);
             Set<String> sets = sub_channel.get(clientId);
 
             if (null != sets) {
-                synchronized (sets) {
-                    for (int i = 0; i < channel.length; i++) {
-                        sets.add(channel[i]);
-                    }
+//                synchronized (sets) {
+                for (int i = 0; i < channel.length; i++) {
+                    sets.add(channel[i]);
                 }
+//                }
             } else {
                 Set<String> newSet = new HashSet<>();
                 for (int i = 0; i < channel.length; i++) {
@@ -120,26 +126,32 @@ public abstract class AbstractWebsocketServer {
      * @param clientId 客户端ID
      * @param channel  订阅频道
      */
-    public static void unSubChannel(String clientId, Map<String, NioSocketChannel> map, String... channel) {
+    public static void unSubChannel(String clientId, Map<String, NioSocketChannel> map, NioSocketChannel socketChannel, String... channel) {
+
+        NioSocketChannel conn = connetionPool.get(clientId);
+        if (conn != socketChannel) {
+            socketChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.illegaError())));
+            return;
+        }
+
         Set<String> set = sub_channel.get(clientId);
         List<String> channList = Arrays.asList(channel);
+        Set<String> newSet = new HashSet<>();
         if (null != set) {
-            synchronized (set) {
-                Iterator<String> iterator = set.iterator();
-                while (iterator.hasNext()) {
-                    String value = iterator.next();
-                    if (channList.contains(value)) {
-                        set.remove(value);
-                    }
-                }
-                if (!iterator.hasNext()) {
-                    map.remove(clientId);
+//            synchronized (set) {
+            Iterator<String> iterator = set.iterator();
+            while (iterator.hasNext()) {
+                String value = iterator.next();
+                if (!channList.contains(value)) {
+                    newSet.add(value);
                 }
             }
+            sub_channel.put(clientId, newSet);
+//            }
         }
     }
 
-    public synchronized static void unSubAllChannel(String clientId) {
+    public static void unSubAllChannel(String clientId) {
         depthPool.remove(clientId);
         klinePool.remove(clientId);
         detailPool.remove(clientId);

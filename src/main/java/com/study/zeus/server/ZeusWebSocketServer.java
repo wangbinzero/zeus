@@ -64,13 +64,13 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
             String clientId = req.getId();
             switch (type) {
                 case Constant.Cmd.DETAIL:
-                    AbstractWebsocketServer.unSubChannel(clientId, detailPool, channel);
+                    AbstractWebsocketServer.unSubChannel(clientId, detailPool, socketChannel, channel);
                     break;
                 case Constant.Cmd.DEPTH:
-                    AbstractWebsocketServer.unSubChannel(clientId, depthPool, channel);
+                    AbstractWebsocketServer.unSubChannel(clientId, depthPool, socketChannel, channel);
                     break;
                 case Constant.Cmd.KLINE:
-                    AbstractWebsocketServer.unSubChannel(clientId, klinePool, channel);
+                    AbstractWebsocketServer.unSubChannel(clientId, klinePool, socketChannel, channel);
                 case Constant.Cmd.ALL:
                     AbstractWebsocketServer.unSubAllChannel(clientId);
             }
@@ -137,6 +137,7 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
      */
     private void allocUUID(ChannelHandlerContext ctx) {
         String uuid = UUID.randomUUID().toString();
+        AbstractWebsocketServer.connetionPool.put(uuid, (NioSocketChannel) ctx.channel());
         logger.info("客户端:[{}],UUID:[{}]", RemoteUtil.parseRemoteAddress(ctx.channel()), uuid);
         ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(Response.sucess(uuid, "conn", "conn"))));
     }

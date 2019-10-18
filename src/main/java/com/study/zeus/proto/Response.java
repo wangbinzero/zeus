@@ -106,6 +106,10 @@ public class Response<T> implements Serializable {
         return new Response(message, code);
     }
 
+    public static Response illegaError(){
+        return new Response("非法操作",10002);
+    }
+
 
     @Override
     public String toString() {
