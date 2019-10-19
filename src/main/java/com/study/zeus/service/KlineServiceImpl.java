@@ -30,7 +30,7 @@ public class KlineServiceImpl implements KlineService {
         if (null != result) {
             updateNew(query, klineDO);
         } else {
-            klineDO.setCreateTime(new Date().getTime());
+            klineDO.setCreateTime(System.currentTimeMillis());
             mongoTemplate.insert(klineDO);
         }
         return null;
@@ -84,7 +84,7 @@ public class KlineServiceImpl implements KlineService {
         update.set("high", klineDO.getHigh());
         update.set("vol", klineDO.getVol());
         update.set("id", klineDO.getId());
-        update.set("updateTime", new Date().getTime());
+        update.set("updateTime", System.currentTimeMillis());
         mongoTemplate.updateFirst(query, update, KlineDO.class);
     }
 }

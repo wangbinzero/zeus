@@ -134,16 +134,10 @@ public abstract class AbstractWebsocketServer {
 
         Set<String> set = sub_channel.get(clientId);
         List<String> channList = Arrays.asList(channel);
-        Set<String> newSet = new HashSet<>();
         if (null != set) {
-            Iterator<String> iterator = set.iterator();
-            while (iterator.hasNext()) {
-                String value = iterator.next();
-                if (!channList.contains(value)) {
-                    newSet.add(value);
-                }
+            for (int i = 0; i < channList.size(); i++) {
+                set.remove(channList.get(i));
             }
-            sub_channel.put(clientId, newSet);
         }
     }
 

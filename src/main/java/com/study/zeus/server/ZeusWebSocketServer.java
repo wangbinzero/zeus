@@ -71,8 +71,10 @@ public class ZeusWebSocketServer extends AbstractWebsocketServer {
                     break;
                 case Constant.Cmd.KLINE:
                     unSubChannel(clientId, klinePool, socketChannel, channel);
+                    break;
                 case Constant.Cmd.ALL:
                     unSubAllChannel(clientId);
+                    break;
             }
         } else if (event.equalsIgnoreCase("req")) {
             klineEvent(socketChannel, channel[0]);
