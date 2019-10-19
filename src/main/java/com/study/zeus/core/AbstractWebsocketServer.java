@@ -3,7 +3,6 @@ package com.study.zeus.core;
 import com.alibaba.fastjson.JSON;
 import com.study.zeus.proto.Request;
 import com.study.zeus.proto.Response;
-import com.study.zeus.utils.StringUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,7 +15,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
-import org.apache.tomcat.util.net.NioSelectorPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

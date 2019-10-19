@@ -1,6 +1,5 @@
 package com.study.zeus.controller;
 
-import com.study.zeus.core.AbstractWebsocketServer;
 import com.study.zeus.entity.KlineDO;
 import com.study.zeus.service.KlineService;
 import org.springframework.beans.factory.annotation.Autowired;
