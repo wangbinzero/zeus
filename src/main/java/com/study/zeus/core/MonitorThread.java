@@ -19,8 +19,10 @@ public class MonitorThread implements Runnable {
 
     @Override
     public void run() {
-        if(System.currentTimeMillis()-currentTime>timeoutInterval){
-            //TODO 执行重连策略
+        if (System.currentTimeMillis() - currentTime > timeoutInterval) {
+            if (!client.isAlive()) {
+                client.reConnect();
+            }
         }
     }
 }

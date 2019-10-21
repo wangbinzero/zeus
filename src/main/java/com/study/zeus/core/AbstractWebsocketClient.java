@@ -10,6 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketClientCompressionHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -73,7 +74,9 @@ public abstract class AbstractWebsocketClient {
                 if (sslContext != null) {
                     pipeline.addLast(sslContext.newHandler(ch.alloc(), host, port));
                 }
-                pipeline.addLast(new HttpClientCodec(), new HttpObjectAggregator(maxContentLength), handler);
+                pipeline.addLast(new HttpClientCodec(), new HttpObjectAggregator(maxContentLength),
+                        WebSocketClientCompressionHandler.INSTANCE,
+                        handler);
             }
         });
         channel = client.connect(host, port).sync().channel();
@@ -100,7 +103,7 @@ public abstract class AbstractWebsocketClient {
 
     public void start() {
         this.connect();
-        monitorThread= new MonitorThread(this);
+        monitorThread = new MonitorThread(this);
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(monitorThread, 0, 5000, TimeUnit.MILLISECONDS);
     }

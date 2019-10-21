@@ -76,4 +76,11 @@ public class HuobiHandler extends SimpleChannelInboundHandler<Object> {
         ctx.close();
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        logger.error("火币客户端断开连接: [{}]", client.isAlive());
+        client.reConnect();
+        logger.info("重连结果: [{}]", client.isAlive());
+    }
 }

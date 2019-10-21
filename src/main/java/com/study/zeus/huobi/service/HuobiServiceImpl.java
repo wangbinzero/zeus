@@ -42,6 +42,7 @@ public class HuobiServiceImpl implements HuobiService {
 
     @Override
     public void onReceive(String message) {
+        LOG.info("msg: [{}]",message);
         if (message.contains("subbed")) {
             return;
         }
